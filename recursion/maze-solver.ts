@@ -42,9 +42,7 @@ export default function mazeSolver(
       }
 
       // has seen
-      const seenKey = makeSeenKey(point);
-      if (seen.has(seenKey)) continue;
-      seen.add(makeSeenKey(point));
+      if (seen.has(makeSeenKey(point))) continue;
 
       // is wall
       if (maze[point.y]?.[point.x] === wall) continue;
@@ -62,6 +60,7 @@ export default function mazeSolver(
     }
 
     if (!newPoint) throw new Error("Unsolvable Maze");
+    seen.add(makeSeenKey(newPoint));
     path.push(newPoint);
     currentPoint = newPoint;
   } while (arrived === false);
