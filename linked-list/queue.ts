@@ -1,9 +1,12 @@
-import type { LinkedList } from "./linked-list";
+interface Node<T> {
+  value: T;
+  next?: Node<T>;
+}
 
 export class Queue<T> {
   public length: number;
-  private head?: LinkedList<T>;
-  private tail?: LinkedList<T>;
+  private head?: Node<T>;
+  private tail?: Node<T>;
 
   constructor() {
     this.head = this.tail = undefined;
