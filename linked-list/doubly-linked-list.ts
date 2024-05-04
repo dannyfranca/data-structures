@@ -44,7 +44,7 @@ export class DoublyLinkedList<T> {
   insertAt(item: T, idx: number) {
     if (idx >= this.length) throw new Error("index bigger than length");
     if (idx === 0) return this.prepend(item);
-    if (idx === this.length - 1) return this.append(item);
+    if (idx === this.length) return this.append(item);
 
     this.length++;
     let curr = this.getAt(idx)!;
@@ -52,14 +52,15 @@ export class DoublyLinkedList<T> {
     const node: Node<T> = { value: item };
     node.next = curr;
     node.prev = curr.prev;
+    if (node.prev) node.prev.next = node;
     curr.prev = node;
   }
 
   remove(item: T): T | undefined {
     let curr = this.head;
     for (let i = 0; curr && i < this.length; ++i) {
-      curr = curr.next;
       if (curr?.value === item) break;
+      curr = curr.next;
     }
     if (!curr) return;
     return this.removeNode(curr);
@@ -87,10 +88,10 @@ export class DoublyLinkedList<T> {
     this.length--;
 
     if (node.prev) node.prev.next = node.next;
-    else this.head = node.next;
+    if (node === this.head) this.head = node.next;
 
     if (node.next) node.next.prev = node.prev;
-    else this.tail = node.prev;
+    if (node === this.tail) this.tail = node.prev;
 
     node.next = node.prev = undefined;
     return node.value;
