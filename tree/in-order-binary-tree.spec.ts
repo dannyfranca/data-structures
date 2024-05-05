@@ -5,7 +5,7 @@ import {
   inOrderBinaryTreeIterative,
 } from "./in-order-binary-tree";
 
-test("Pre order", function () {
+test("In order", function () {
   expect(inOrderBinaryTree(tree)).toEqual([
     5, 7, 10, 15, 20, 29, 30, 45, 50, 100,
   ]);
