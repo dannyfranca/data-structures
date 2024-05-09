@@ -18,11 +18,11 @@ export class RingBuffer<T> {
     else this.headIndex = (this.headIndex + 1) % this.capacity;
   }
 
-  readFirst(): T | undefined {
+  peekFirst(): T | undefined {
     return this.buffer[this.headIndex];
   }
 
-  readLast(): T | undefined {
+  peekLast(): T | undefined {
     return this.buffer[this.tailIndex - 1];
   }
 }
