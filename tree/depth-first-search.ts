@@ -11,7 +11,7 @@ function search<T>(node: BinaryNode<T> | null, needle: T): boolean {
   return search(node.right, needle);
 }
 
-export function depthFirstSearchRecursive<T>(
+export function depthFirstSearchIterative<T>(
   node: BinaryNode<T>,
   needle: T
 ): boolean {

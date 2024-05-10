@@ -11,7 +11,7 @@ export function compare<T>(
   return compare(a.left, b.left) && compare(a.right, b.right);
 }
 
-export function compareRecursive<T>(
+export function compareIterative<T>(
   bta: BinaryNode<T> | null,
   btb: BinaryNode<T> | null
 ): boolean {
