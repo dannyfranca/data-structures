@@ -1,9 +1,11 @@
 class TrieNode {
   children: Map<string, TrieNode>;
+  parent: TrieNode | null;
   isEndOfWord: boolean;
 
   constructor() {
     this.children = new Map();
+    this.parent = null;
     this.isEndOfWord = false;
   }
 }
@@ -16,48 +18,68 @@ export class Trie {
   }
 
   insert(word: string): void {
+    let curr = this.root;
+
+    for (let i = 0; i < word.length; i++) {
+      const char = word[i];
+
+      if (!curr.children.has(char)) {
+        curr.children.set(char, new TrieNode());
+      }
+
+      const prev = curr;
+      curr = curr.children.get(char)!;
+      curr.parent = prev;
+    }
+
+    curr.isEndOfWord = true;
+  }
+
+  findNode(word: string): TrieNode | null {
     let currentNode = this.root;
 
     for (let i = 0; i < word.length; i++) {
       const char = word[i];
 
       if (!currentNode.children.has(char)) {
-        currentNode.children.set(char, new TrieNode());
+        return null;
       }
 
       currentNode = currentNode.children.get(char)!;
     }
 
-    currentNode.isEndOfWord = true;
+    return currentNode ?? null;
   }
 
   search(word: string): boolean {
-    let currentNode = this.root;
-
-    for (let i = 0; i < word.length; i++) {
-      const char = word[i];
-
-      if (!currentNode.children.has(char)) {
-        return false;
-      }
-
-      currentNode = currentNode.children.get(char)!;
-    }
-
-    return currentNode.isEndOfWord;
+    return this.findNode(word)?.isEndOfWord ?? false;
   }
 
   startsWith(prefix: string): boolean {
-    let currentNode = this.root;
+    return !!this.findNode(prefix);
+  }
 
-    for (let i = 0; i < prefix.length; i++) {
-      const char = prefix[i];
+  delete(word: string): boolean {
+    const node = this.findNode(word);
 
-      if (!currentNode.children.has(char)) {
-        return false;
+    if (!node || !node.isEndOfWord) {
+      return false;
+    }
+
+    node.isEndOfWord = false;
+
+    let currentNode = node;
+    let parent = currentNode.parent;
+
+    while (parent !== null) {
+      if (currentNode.isEndOfWord || currentNode.children.size > 0) {
+        break;
       }
 
-      currentNode = currentNode.children.get(char)!;
+      parent.children.delete(word[word.length - 1]);
+      currentNode = parent;
+      parent = currentNode.parent;
+      word = word.slice(0, -1);
     }
 
     return true;
